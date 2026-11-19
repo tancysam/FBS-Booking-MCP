@@ -4,3 +4,8 @@ dist/
 session.json
 *.log
 .claude/
+
+/plugin-package/*/smu-fbs-booking/runtime/
+/plugin-package/*/smu-fbs-booking/.build-*/
+/plugin-package/claude/smu-fbs-booking/.mcp.json
+/plugin-package/codex/smu-fbs-booking/mcp.json

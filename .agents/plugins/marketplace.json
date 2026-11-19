@@ -1,0 +1,20 @@
+{
+  "name": "smu-fbs",
+  "interface": {
+    "displayName": "SMU FBS"
+  },
+  "plugins": [
+    {
+      "name": "smu-fbs-booking",
+      "source": {
+        "source": "local",
+        "path": "./plugin-package/codex/smu-fbs-booking"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

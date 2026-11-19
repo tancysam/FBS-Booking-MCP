@@ -21,7 +21,7 @@ Before you set up the server, make sure you have:
 | Codex CLI or ChatGPT desktop in a local thread | `codex` | [Codex and ChatGPT desktop marketplace setup](https://github.com/tancysam/SMU-FBS-Booking-MCP/tree/codex#install-in-codex-or-chatgpt-desktop) |
 | Claude Desktop or any client that supports local stdio MCP | `main` | [Manual setup](#manual-setup) |
 
-All three branches run the server on your computer. ChatGPT in a browser and cloud-only threads require a remote MCP endpoint. See [OpenAI's desktop-only plugin documentation](https://developers.openai.com/plugins/deploy/desktop-only).
+The marketplace setup commands build both plugins from the same server source and install the one for your client. Each installation runs the server on your computer. ChatGPT in a browser and cloud-only threads require a remote MCP endpoint. See [OpenAI's desktop-only plugin documentation](https://developers.openai.com/plugins/deploy/desktop-only).
 
 ### Manual setup
 
@@ -122,3 +122,5 @@ npm run typecheck
 npm test
 npm run build
 ```
+
+After installing dependencies with `npm ci`, run `npm run build:plugins` to build both marketplace packages without registering either client. The generated runtimes and machine-specific MCP configs live under `plugin-package/`.
