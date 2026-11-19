@@ -1,4 +1,4 @@
-# SMU FBS Booking MCP
+# FBS Booking MCP
 
 A Model Context Protocol (MCP) server that lets an AI assistant take the place of a web interface to search, check, and manage SMU facility bookings through using your own signed-in session. Installed locally.
 
@@ -10,7 +10,7 @@ A Model Context Protocol (MCP) server that lets an AI assistant take the place o
 Before you set up the server, make sure you have:
 
 - **Git and Node.js 20.18.1 or newer**
-- **SMU intranet access** so your machine can reach `fbsm.intranet.smu.edu.sg` (on campus or over the SMU VPN)
+- **SMU intranet access** 
 - **Google Chrome, Microsoft Edge, or Brave** installed on the same machine, with a desktop display where it can open a window
 
 ## Choose an installation method
