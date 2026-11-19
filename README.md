@@ -2,6 +2,9 @@
 
 An unofficial Model Context Protocol (MCP) server that lets an AI assistant search, check, and manage Singapore Management University (SMU) facility bookings through the FBS Mobile web app (`fbsm.intranet.smu.edu.sg`) using your own signed-in session.
 
+>[!Important]
+>This is something that I created when procrastinating for finals, and I have not tested it out that thoroughly yet. So be prepared to encounter bugs or issues.
+
 ## Prerequisites
 
 Before you set up the server, make sure you have:
@@ -12,26 +15,22 @@ Before you set up the server, make sure you have:
 
 ## Install in Claude Code
 
-1. Clone the `claude` branch, then build and stage the plugin.
+1. Install the Claude Code CLI, then clone this branch.
 
    ```sh
    git clone --branch claude --single-branch https://github.com/tancysam/SMU-FBS-Booking-MCP.git SMU-FBS-Booking-MCP-claude
    cd SMU-FBS-Booking-MCP-claude
-   npm ci
-   node scripts/stage-plugin.mjs
    ```
 
-2. Register the local catalog and install the plugin in your Claude Code user profile.
+2. Build the server and install the plugin in your Claude Code user profile.
 
    ```sh
-   claude plugin marketplace add "$PWD"
-   claude plugin install smu-fbs-booking@smu-fbs --scope user
-   claude plugin list
+   npm run setup:claude
    ```
 
-3. Start a new Claude Code session and [sign in to FBS](#sign-in-to-fbs). Keep the checkout in place so the local marketplace can find the plugin.
+3. Start a new Claude Code session and [sign in to FBS](#sign-in-to-fbs).
 
-For Claude Desktop, use [manual setup on the main branch](https://github.com/tancysam/SMU-FBS-Booking-MCP/tree/main#manual-setup).
+Keep the checkout in place so Claude Code can find the local marketplace. For Claude Desktop, see the [manual setup on the main branch](https://github.com/tancysam/SMU-FBS-Booking-MCP/tree/main#manual-setup).
 
 ## Sign in to FBS
 
@@ -107,3 +106,5 @@ npm run typecheck
 npm test
 npm run build
 ```
+
+After installing dependencies with `npm ci`, run `npm run build:plugins` to build both marketplace packages without registering either client. The generated runtimes and machine-specific MCP configs live under `plugin-package/`.
