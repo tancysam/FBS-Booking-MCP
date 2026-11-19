@@ -2,6 +2,9 @@
 
 An unofficial Model Context Protocol (MCP) server that lets an AI assistant search, check, and manage Singapore Management University (SMU) facility bookings through the FBS Mobile web app (`fbsm.intranet.smu.edu.sg`) using your own signed-in session.
 
+>[!Important]
+>This is something that I created when procrastinating for finals, and I have not tested it out that thoroughly yet. So be prepared to encounter bugs or issues.
+
 ## Prerequisites
 
 Before you set up the server, make sure you have:
