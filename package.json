@@ -9,6 +9,9 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
+    "build:plugins": "npm run build && node scripts/build-plugins.mjs",
+    "setup:claude": "node scripts/setup-plugin.mjs claude",
+    "setup:codex": "node scripts/setup-plugin.mjs codex",
     "prepare": "npm run build",
     "start": "node dist/index.js",
     "test": "tsx --test test/*.test.ts",

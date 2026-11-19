@@ -2,6 +2,9 @@
 
 An unofficial Model Context Protocol (MCP) server that lets an AI assistant search, check, and manage Singapore Management University (SMU) facility bookings through the FBS Mobile web app (`fbsm.intranet.smu.edu.sg`) using your own signed-in session.
 
+>[!Important]
+>This is something that I created when procrastinating for finals, and I have not tested it out that thoroughly yet. So be prepared to encounter bugs or issues.
+
 ## Prerequisites
 
 Before you set up the server, make sure you have:
@@ -12,27 +15,21 @@ Before you set up the server, make sure you have:
 
 ## Install in Codex or ChatGPT desktop
 
-1. With a current Codex CLI installed, clone the `codex` branch, then build and stage the plugin.
+1. Install the Codex CLI, then clone this branch.
 
    ```sh
    git clone --branch codex --single-branch https://github.com/tancysam/SMU-FBS-Booking-MCP.git SMU-FBS-Booking-MCP-codex
    cd SMU-FBS-Booking-MCP-codex
-   npm ci
-   node scripts/stage-plugin.mjs
    ```
 
-2. Add the local marketplace from the checkout.
+2. Run the setup command for your client.
 
-   ```sh
-   codex plugin marketplace add "$PWD"
-   ```
+   - **Codex CLI.** Run `npm run setup:codex` to build and install the plugin, then start a new Codex session.
+   - **ChatGPT desktop.** Run `npm run setup:codex -- --marketplace-only` to build the plugin and register the marketplace. Restart the app, open the **Plugins Directory** in Codex, and install **SMU FBS Booking** from **SMU FBS**. Open a thread that runs locally on your computer.
 
-3. Install the plugin in your client.
+3. [Sign in to FBS](#sign-in-to-fbs).
 
-   - **Codex CLI:** Run `codex plugin add smu-fbs-booking@smu-fbs`, then start a new session.
-   - **ChatGPT desktop:** Restart the app, open the **Plugins Directory** in Codex, select the **SMU FBS** marketplace, and install **SMU FBS Booking**. Open a thread that runs locally on your computer.
-
-4. [Sign in to FBS](#sign-in-to-fbs). Use a local thread so the server can open a browser window and reach the SMU intranet.
+Keep the checkout in place so Codex can find the local marketplace.
 
 ## Sign in to FBS
 
@@ -108,3 +105,5 @@ npm run typecheck
 npm test
 npm run build
 ```
+
+After installing dependencies with `npm ci`, run `npm run build:plugins` to build both marketplace packages without registering either client. The generated runtimes and machine-specific MCP configs live under `plugin-package/`.

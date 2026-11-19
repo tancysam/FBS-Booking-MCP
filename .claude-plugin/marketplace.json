@@ -1,0 +1,14 @@
+{
+  "name": "smu-fbs",
+  "owner": {
+    "name": "tancysam"
+  },
+  "plugins": [
+    {
+      "name": "smu-fbs-booking",
+      "source": "./plugin-package/claude/smu-fbs-booking",
+      "description": "Search and manage SMU facility bookings using your signed-in FBS session."
+    }
+  ],
+  "description": "Claude Code plugins for SMU facility bookings."
+}

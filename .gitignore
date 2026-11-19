@@ -5,5 +5,7 @@ session.json
 *.log
 .claude/
 
-/plugins/smu-fbs-booking/runtime/
-/plugins/smu-fbs-booking/mcp.json
+/plugin-package/*/smu-fbs-booking/runtime/
+/plugin-package/*/smu-fbs-booking/.build-*/
+/plugin-package/claude/smu-fbs-booking/.mcp.json
+/plugin-package/codex/smu-fbs-booking/mcp.json

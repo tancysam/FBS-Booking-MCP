@@ -8,7 +8,7 @@
       "name": "smu-fbs-booking",
       "source": {
         "source": "local",
-        "path": "./plugins/smu-fbs-booking"
+        "path": "./plugin-package/codex/smu-fbs-booking"
       },
       "policy": {
         "installation": "AVAILABLE",

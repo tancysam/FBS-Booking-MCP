@@ -1,0 +1,8 @@
+{
+  "name": "smu-fbs-booking",
+  "version": "0.1.0",
+  "description": "Search and manage SMU facility bookings using your signed-in FBS session.",
+  "author": {
+    "name": "tancysam"
+  }
+}
