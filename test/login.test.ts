@@ -1,10 +1,13 @@
 import assert from "node:assert/strict";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
 import { test, type TestContext } from "node:test";
 import { setImmediate } from "node:timers/promises";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import type { BrowserSession } from "../src/browser.js";
+import { DedicatedBrowser, type BrowserSession } from "../src/browser.js";
 import { FbsClient } from "../src/client.js";
 import { SessionError } from "../src/session.js";
 import { registerTools } from "../src/tools.js";
@@ -82,4 +85,49 @@ test("fbs_login waits before navigating the browser during another FBS operation
   await operation;
   assert.equal((await login).isError, undefined);
   assert.equal(opened, true);
+});
+
+test("fbs_login reports a locked profile and an unreachable intranet without leaking launch details", async (t) => {
+  const home = fs.mkdtempSync(path.join(os.tmpdir(), "fbs-login-"));
+  const previous = process.env.FBS_MCP_HOME;
+  process.env.FBS_MCP_HOME = home;
+  t.after(() => {
+    if (previous === undefined) delete process.env.FBS_MCP_HOME;
+    else process.env.FBS_MCP_HOME = previous;
+    fs.rmSync(home, { recursive: true, force: true });
+  });
+
+  const page = {
+    url: () => "about:blank",
+    once: () => {},
+    goto: async () => { throw new Error("private-navigation-url"); },
+  };
+  const context = {
+    on: () => {},
+    pages: () => [page],
+    close: async () => {},
+  };
+  const makeBrowser = (launch: () => Promise<unknown>) =>
+    new DedicatedBrowser(
+      launch as ConstructorParameters<typeof DedicatedBrowser>[0],
+      () => ({ id: "brave", name: "Brave", executablePath: "brave" }),
+    );
+  const cases = [
+    {
+      browser: makeBrowser(async () => { throw new Error("ProcessSingleton private-profile-path"); }),
+      expected: /already open.*Close that client.*FBS_MCP_HOME/,
+    },
+    {
+      browser: makeBrowser(async () => context),
+      expected: /Could not open FBS in Brave.*SMU intranet/,
+    },
+  ];
+
+  for (const { browser, expected } of cases) {
+    const { client } = await connect(t, () => browser.openForSignIn());
+    const result = await client.callTool({ name: "fbs_login" });
+    assert.equal(result.isError, true);
+    assert.match(JSON.stringify(result.content), expected);
+    assert.doesNotMatch(JSON.stringify(result.content), /private-profile-path|private-navigation-url/);
+  }
 });

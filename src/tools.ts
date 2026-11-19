@@ -1,6 +1,7 @@
 import { randomBytes } from "node:crypto";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
+import { BrowserSetupError } from "./browser.js";
 import { FbsClient } from "./client.js";
 import {
   bookingOptions,
@@ -264,7 +265,9 @@ export function registerTools(server: McpServer, client: FbsClient, now: () => n
       run(async () => {
         try {
           await client.browser.openForSignIn();
-        } catch {
+        } catch (err) {
+          // A setup failure needs user action, so skip session renewal.
+          if (err instanceof BrowserSetupError) throw new Error(err.message);
           throw new Error(
             "Could not open the SMU sign-in window. Check that Chrome, Edge or Brave is installed and can open a " +
               "window on the MCP server machine. Set FBS_BROWSER to chrome, edge or brave to choose one.",
