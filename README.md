@@ -44,6 +44,7 @@ Sign-in happens only inside a dedicated Chrome, Edge, or Brave browser window ma
 
 - **Browser selection:** By default, the server launches the first installed browser it finds in the order Chrome, Edge, Brave. Set `FBS_BROWSER` to choose a specific browser. Switching browsers requires signing in again because each browser uses its own profile directory.
 - **Session keep-alive:** FBS signs you out after roughly 30 minutes of inactivity. While running, the server sends a lightweight read-only check every 20 minutes of inactivity to keep your session alive, and stops after 8 hours without tool use. Adjust these intervals with `FBS_KEEPALIVE_MINUTES` and `FBS_KEEPALIVE_MAX_HOURS`.
+- **After restarting your client:** Run `fbs_session_status` to reopen the dedicated profile and verify the FBS session. Keep the same `FBS_BROWSER` and `FBS_MCP_HOME` to reuse the profile. If SMU prompts for sign-in again, run `fbs_login` and complete the prompt.
 - **One server per profile:** Each MCP client starts its own server process. To run two clients at the same time, give the second client a separate `FBS_MCP_HOME` directory and sign in there.
 
 ## How safety works

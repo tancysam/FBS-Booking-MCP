@@ -13,6 +13,9 @@ export interface BrowserSession {
   openForSignIn(): Promise<void>;
 }
 
+/** A browser setup failure with a recovery message safe to show to MCP users. */
+export class BrowserSetupError extends SessionError {}
+
 const LEGACY_HOME = "https://fbs.intranet.smu.edu.sg/home.aspx";
 const SSO_GRACE_MS = 8_000;
 const DASHBOARD = new URL("DashBoard", BASE);
@@ -163,7 +166,7 @@ export class DedicatedBrowser implements BrowserSession {
       const locked =
         /ProcessSingleton|SingletonLock|Opening in existing browser session|profile (?:appears to be|is) in use|user data directory is already in use/i
           .test(detail);
-      throw new SessionError(
+      throw new BrowserSetupError(
         locked
           ? `The FBS ${browser.name} profile is already open in another fbs-mcp server, usually a second MCP client. ` +
             "Close that client, or give this one its own profile by setting a different FBS_MCP_HOME."
@@ -200,7 +203,7 @@ export class DedicatedBrowser implements BrowserSession {
     try {
       await page.goto(BASE, { referer: LEGACY_HOME, waitUntil: "domcontentloaded", timeout: REQUEST_TIMEOUT_MS });
     } catch {
-      throw new SessionError(`Could not open FBS in ${this.name}. Check that it can reach the SMU intranet and try again.`);
+      throw new BrowserSetupError(`Could not open FBS in ${this.name}. Check that it can reach the SMU intranet and try again.`);
     }
   }
 

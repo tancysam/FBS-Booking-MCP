@@ -100,7 +100,8 @@ test("a write that fails in transit says the outcome is unknown, a read does not
   await assert.rejects(exception.client.serverAction(endpoint, "view", {}, { write: true }), /boom.*not known whether/);
 });
 
-function browserFixture(t: TestContext) {
+function browserFixture(t: TestContext, initiallyOpen = true) {
+  let open = initiallyOpen;
   let clock = 0;
   t.mock.method(Date, "now", () => (clock += 500));
   let expired = false, failRenewal = false, expireAtUsername = false;
@@ -111,10 +112,16 @@ function browserFixture(t: TestContext) {
   const expiredReply = () => Response.json({ exception: { name: "NotRegisteredException" } }, { status: 503 });
   const browser: BrowserSession = {
     name: "Chrome",
-    isOpen: true,
+    get isOpen() { return open; },
     openForSignIn: async () => {},
-    renew: async () => { renewals++; expired = failRenewal; expireAtUsername = failRenewal; },
+    renew: async () => {
+      renewals++;
+      open = true;
+      expired = failRenewal;
+      expireAtUsername = failRenewal;
+    },
     async fetch(url, init) {
+      if (!open) throw new SessionError("Dedicated browser is closed");
       const headers = new Headers(init.headers);
       assert.equal(headers.has("Cookie"), false);
       assert.equal(headers.has("X-CSRFToken"), false);
@@ -146,6 +153,15 @@ function browserFixture(t: TestContext) {
     cancel: () => client.withSession(() => client.serverAction(writeEndpoint, "view", {}, { write: true }), true),
   };
 }
+
+test("the first read opens a restored browser session and gets a fresh FBS backend token", async (t) => {
+  const f = browserFixture(t, false);
+  assert.deepEqual(f.session.data, {});
+
+  assert.deepEqual(await f.getCredits(), { credits: 5 });
+  assert.deepEqual(f.sentTokens, ["token-1"]);
+  assert.equal(f.renewals(), 1);
+});
 
 test("Chrome renews an expired read and rebuilds it with a new backend token", async (t) => {
   const f = browserFixture(t);
