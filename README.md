@@ -1,6 +1,6 @@
 # SMU FBS Booking MCP
 
-An unofficial Model Context Protocol (MCP) server that lets an AI assistant search, check, and manage Singapore Management University (SMU) facility bookings through the FBS Mobile web app (`fbsm.intranet.smu.edu.sg`) using your own signed-in session.
+A Model Context Protocol (MCP) server that lets an AI assistant take the place of a web interface to search, check, and manage SMU facility bookings through using your own signed-in session. Installed locally.
 
 >[!Important]
 >This is something that I created when procrastinating for finals, and I have not tested it out that thoroughly yet. So be prepared to encounter bugs or issues.
