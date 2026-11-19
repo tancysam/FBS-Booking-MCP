@@ -1,0 +1,5 @@
+{
+  "mcpServers": {
+    "fbs": { "command": "node", "args": ["dist/index.js"] }
+  }
+}
