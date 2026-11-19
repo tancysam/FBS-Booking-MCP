@@ -10,40 +10,29 @@ Before you set up the server, make sure you have:
 - **SMU intranet access** so your machine can reach `fbsm.intranet.smu.edu.sg` (on campus or over the SMU VPN)
 - **Google Chrome, Microsoft Edge, or Brave** installed on the same machine, with a desktop display where it can open a window
 
-## Choose an installation method
+## Install in Codex or ChatGPT desktop
 
-| Client | Branch | Install using |
-|---|---|---|
-| Claude Code | `claude` | [Claude Code marketplace setup](https://github.com/tancysam/SMU-FBS-Booking-MCP/tree/claude#install-in-claude-code) |
-| Codex CLI or ChatGPT desktop in a local thread | `codex` | [Codex and ChatGPT desktop marketplace setup](https://github.com/tancysam/SMU-FBS-Booking-MCP/tree/codex#install-in-codex-or-chatgpt-desktop) |
-| Claude Desktop or any client that supports local stdio MCP | `main` | [Manual setup](#manual-setup) |
-
-All three branches run the server on your computer. ChatGPT in a browser and cloud-only threads require a remote MCP endpoint. See [OpenAI's desktop-only plugin documentation](https://developers.openai.com/plugins/deploy/desktop-only).
-
-### Manual setup
-
-1. Clone `main` and install the locked dependencies. This also builds the server.
+1. With a current Codex CLI installed, clone the `codex` branch, then build and stage the plugin.
 
    ```sh
-   git clone --branch main --single-branch https://github.com/tancysam/SMU-FBS-Booking-MCP.git
-   cd SMU-FBS-Booking-MCP
+   git clone --branch codex --single-branch https://github.com/tancysam/SMU-FBS-Booking-MCP.git SMU-FBS-Booking-MCP-codex
+   cd SMU-FBS-Booking-MCP-codex
    npm ci
+   node scripts/stage-plugin.mjs
    ```
 
-2. In Claude Desktop or another client that uses `mcpServers` configuration, add the following entry. Replace `/ABS/PATH/TO/SMU-FBS-Booking-MCP` with the full path to your checkout. If you already have an `mcpServers` object, add `fbs` to it.
+2. Add the local marketplace from the checkout.
 
-   ```json
-   {
-     "mcpServers": {
-       "fbs": {
-         "command": "node",
-         "args": ["/ABS/PATH/TO/SMU-FBS-Booking-MCP/dist/index.js"]
-       }
-     }
-   }
+   ```sh
+   codex plugin marketplace add "$PWD"
    ```
 
-3. Restart your client and [sign in to FBS](#sign-in-to-fbs).
+3. Install the plugin in your client.
+
+   - **Codex CLI:** Run `codex plugin add smu-fbs-booking@smu-fbs`, then start a new session.
+   - **ChatGPT desktop:** Restart the app, open the **Plugins Directory** in Codex, select the **SMU FBS** marketplace, and install **SMU FBS Booking**. Open a thread that runs locally on your computer.
+
+4. [Sign in to FBS](#sign-in-to-fbs). Use a local thread so the server can open a browser window and reach the SMU intranet.
 
 ## Sign in to FBS
 
