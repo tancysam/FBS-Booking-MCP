@@ -6,57 +6,44 @@ An unofficial Model Context Protocol (MCP) server that lets an AI assistant sear
 
 Before you set up the server, make sure you have:
 
-- **Node.js 20 or newer**
+- **Git and Node.js 20.18.1 or newer**
 - **SMU intranet access** so your machine can reach `fbsm.intranet.smu.edu.sg` (on campus or over the SMU VPN)
 - **Google Chrome, Microsoft Edge, or Brave** installed on the same machine, with a desktop display where it can open a window
 
-## Install and build
+## Choose an installation method
 
-Clone the repository and install its dependencies:
+| Client | Branch | Install using |
+|---|---|---|
+| Claude Code | `claude` | [Claude Code marketplace setup](https://github.com/tancysam/SMU-FBS-Booking-MCP/tree/claude#install-in-claude-code) |
+| Codex CLI or ChatGPT desktop in a local thread | `codex` | [Codex and ChatGPT desktop marketplace setup](https://github.com/tancysam/SMU-FBS-Booking-MCP/tree/codex#install-in-codex-or-chatgpt-desktop) |
+| Claude Desktop or any client that supports local stdio MCP | `main` | [Manual setup](#manual-setup) |
 
-```sh
-git clone https://github.com/tancysam/SMU-FBS-Booking-MCP.git
-cd SMU-FBS-Booking-MCP
-npm install
-```
+All three branches run the server on your computer. ChatGPT in a browser and cloud-only threads require a remote MCP endpoint. See [OpenAI's desktop-only plugin documentation](https://developers.openai.com/plugins/deploy/desktop-only).
 
-`npm install` also compiles the TypeScript source into `dist/`. If you edit the code later, run `npm run build` to rebuild.
+### Manual setup
 
-## Connect an MCP client
+1. Clone `main` and install the locked dependencies. This also builds the server.
 
-Point your MCP client to `dist/index.js` using Node.js. Replace `/ABS/PATH/TO/SMU-FBS-Booking-MCP` with the full path to your cloned repository.
+   ```sh
+   git clone --branch main --single-branch https://github.com/tancysam/SMU-FBS-Booking-MCP.git
+   cd SMU-FBS-Booking-MCP
+   npm ci
+   ```
 
-### Claude Code
+2. In Claude Desktop or another client that uses `mcpServers` configuration, add the following entry. Replace `/ABS/PATH/TO/SMU-FBS-Booking-MCP` with the full path to your checkout. If you already have an `mcpServers` object, add `fbs` to it.
 
-- **From the repository directory:** The included `.mcp.json` file registers the `fbs` server automatically after `npm install` builds `dist/`.
-- **From any directory:** Register the server with the Claude CLI:
+   ```json
+   {
+     "mcpServers": {
+       "fbs": {
+         "command": "node",
+         "args": ["/ABS/PATH/TO/SMU-FBS-Booking-MCP/dist/index.js"]
+       }
+     }
+   }
+   ```
 
-  ```sh
-  claude mcp add fbs -- node /ABS/PATH/TO/SMU-FBS-Booking-MCP/dist/index.js
-  ```
-
-### Codex
-
-Register the server with the Codex CLI:
-
-```sh
-codex mcp add fbs -- node /ABS/PATH/TO/SMU-FBS-Booking-MCP/dist/index.js
-```
-
-### Claude Desktop and other MCP clients
-
-Add the server to your client's MCP configuration file as a stdio server:
-
-```json
-{
-  "mcpServers": {
-    "fbs": {
-      "command": "node",
-      "args": ["/ABS/PATH/TO/SMU-FBS-Booking-MCP/dist/index.js"]
-    }
-  }
-}
-```
+3. Restart your client and [sign in to FBS](#sign-in-to-fbs).
 
 ## Sign in to FBS
 
