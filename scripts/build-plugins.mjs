@@ -15,7 +15,20 @@ const targets = [
     client: "codex",
     configFile: "mcp.json",
     schema: "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
-    server: { type: "stdio", args: ["${PLUGIN_ROOT}/runtime/dist/index.js"] },
+    server: {
+      type: "stdio",
+      cwd: ".",
+      args: ["./runtime/dist/index.js"],
+      env_vars: [
+        "FBS_BROWSER",
+        "FBS_BROWSER_EXECUTABLE",
+        "FBS_CHROME_EXECUTABLE",
+        "FBS_MCP_HOME",
+        "FBS_KEEPALIVE_MINUTES",
+        "FBS_KEEPALIVE_MAX_HOURS",
+        "FBS_DEBUG",
+      ],
+    },
   },
 ];
 const runtime = await mkdtemp(path.join(os.tmpdir(), "fbs-plugin-runtime-"));
