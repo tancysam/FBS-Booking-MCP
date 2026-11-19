@@ -10,40 +10,28 @@ Before you set up the server, make sure you have:
 - **SMU intranet access** so your machine can reach `fbsm.intranet.smu.edu.sg` (on campus or over the SMU VPN)
 - **Google Chrome, Microsoft Edge, or Brave** installed on the same machine, with a desktop display where it can open a window
 
-## Choose an installation method
+## Install in Claude Code
 
-| Client | Branch | Install using |
-|---|---|---|
-| Claude Code | `claude` | [Claude Code marketplace setup](https://github.com/tancysam/SMU-FBS-Booking-MCP/tree/claude#install-in-claude-code) |
-| Codex CLI or ChatGPT desktop in a local thread | `codex` | [Codex and ChatGPT desktop marketplace setup](https://github.com/tancysam/SMU-FBS-Booking-MCP/tree/codex#install-in-codex-or-chatgpt-desktop) |
-| Claude Desktop or any client that supports local stdio MCP | `main` | [Manual setup](#manual-setup) |
-
-All three branches run the server on your computer. ChatGPT in a browser and cloud-only threads require a remote MCP endpoint. See [OpenAI's desktop-only plugin documentation](https://developers.openai.com/plugins/deploy/desktop-only).
-
-### Manual setup
-
-1. Clone `main` and install the locked dependencies. This also builds the server.
+1. Clone the `claude` branch, then build and stage the plugin.
 
    ```sh
-   git clone --branch main --single-branch https://github.com/tancysam/SMU-FBS-Booking-MCP.git
-   cd SMU-FBS-Booking-MCP
+   git clone --branch claude --single-branch https://github.com/tancysam/SMU-FBS-Booking-MCP.git SMU-FBS-Booking-MCP-claude
+   cd SMU-FBS-Booking-MCP-claude
    npm ci
+   node scripts/stage-plugin.mjs
    ```
 
-2. In Claude Desktop or another client that uses `mcpServers` configuration, add the following entry. Replace `/ABS/PATH/TO/SMU-FBS-Booking-MCP` with the full path to your checkout. If you already have an `mcpServers` object, add `fbs` to it.
+2. Register the local catalog and install the plugin in your Claude Code user profile.
 
-   ```json
-   {
-     "mcpServers": {
-       "fbs": {
-         "command": "node",
-         "args": ["/ABS/PATH/TO/SMU-FBS-Booking-MCP/dist/index.js"]
-       }
-     }
-   }
+   ```sh
+   claude plugin marketplace add "$PWD"
+   claude plugin install smu-fbs-booking@smu-fbs --scope user
+   claude plugin list
    ```
 
-3. Restart your client and [sign in to FBS](#sign-in-to-fbs).
+3. Start a new Claude Code session and [sign in to FBS](#sign-in-to-fbs). Keep the checkout in place so the local marketplace can find the plugin.
+
+For Claude Desktop, use [manual setup on the main branch](https://github.com/tancysam/SMU-FBS-Booking-MCP/tree/main#manual-setup).
 
 ## Sign in to FBS
 
